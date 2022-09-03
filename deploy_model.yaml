@@ -1,0 +1,42 @@
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analise-sentimento
+spec:
+  selector:
+    matchLabels:
+      app: analise-sentimento
+  template:
+    metadata:
+      labels:
+        app: analise-sentimento
+    spec:
+      containers:
+      - name: analise-sentimento
+        image: gcrocker/analise-sentimento:v2  # editar Docker registry, nome e tag da imagem
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 800m
+            memory: 1Gi
+          requests:
+            cpu: 400m
+            memory: 100Mi
+        ports:
+        - containerPort: 5000  # editar porta
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: analise-sentimento
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 5000  # editar porta
+    targetPort: 5000  # editar porta
+    name: "5000"  # editar porta
+  selector:
+    app: analise-sentimento
